@@ -1,0 +1,32 @@
+package com.omnibuscode.utils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.Log4JLogger;
+
+/**
+ * @author KIUNSEA
+ * TODO Refactoring log4j 1.x 버전에서 보안 이슈가 있다 log4j 2 버전으로 업그레이드가 필요하다 (jar는 추가되어 있음)
+ */
+public class LogUtil {
+
+	/**
+     * Websphere(WAS5.0) 등에서 디폴트로 commons-logging 을 이용할 수 없으므로
+     * Log4JLogger 를 commons-logging 을 통하지 않고 직접 취한다.
+	 * @param clazz
+	 * @return
+	 */
+	public static Log getLog(Class clazz) {
+
+		Log log = null;
+		
+		try {
+			
+			Class.forName("org.apache.log4j.Logger");
+			log = new Log4JLogger(org.apache.log4j.Logger.getLogger(clazz));
+			
+		} catch (ClassNotFoundException ex) {
+			log = org.apache.commons.logging.LogFactory.getLog(clazz);
+		}
+		
+		return log;
+	}
+}

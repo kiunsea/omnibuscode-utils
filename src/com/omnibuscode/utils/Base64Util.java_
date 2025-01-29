@@ -1,0 +1,219 @@
+package com.omnibuscode.utils;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+/**
+ * @author KIUNSEA
+ * TODO Refactoring jdk 1.8 부터 BASE64Encoder 가 deprecated 되었다 java.util.Base64 로 변경 작업해야 한다
+ */
+public class Base64Util {
+
+    /**
+     * 원본파일을 base64로 인코딩된 파일로 생성한다
+     * 
+     * @param inputFileName
+     * @param outputFileName
+     * @throws IOException
+     */
+    @SuppressWarnings("unused")
+    public static void encodeFiletoFile(String inputFileName, String outputFileName) throws IOException {
+
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+
+        InputStream in = new FileInputStream(new File(inputFileName));
+
+        OutputStream out = new FileOutputStream(new File(outputFileName));
+
+        base64Encoder.encodeBuffer(in, out);
+
+        in.close();
+
+        out.close();
+
+    }
+
+    /**
+     * 원본파일을 baes64인코딩 문자열로바꾸어준다.
+     * 
+     * @param inputFileName
+     * @throws IOException
+     */
+    @SuppressWarnings("unused")
+    public static void encodeFiletoString(String inputFileName) throws IOException {
+
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+
+        @SuppressWarnings("resource")
+        InputStream in = new FileInputStream(new File(inputFileName));
+
+        ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+
+        int len = 0;
+
+        byte[] buf = new byte[1024];
+
+        while ((len = in.read(buf)) != -1) {
+
+            byteOutStream.write(buf, 0, len);
+
+        }
+
+        byte fileArray[] = byteOutStream.toByteArray();
+
+        String encodeString = base64Encoder.encodeBuffer(fileArray);
+
+        System.out.println(encodeString);
+
+    }
+
+    /**
+     * 인코딩된 파일을 다시 디코딩해서 원본파일로 만들어준다
+     * 
+     * @param inputFileName
+     * @param outputFileName
+     * @throws IOException
+     */
+    @SuppressWarnings("unused")
+    public static void decodeFiletoFile(String inputFileName, String outputFileName) throws IOException {
+
+        BASE64Decoder base64Decoder = new BASE64Decoder();
+
+        InputStream in = new FileInputStream(new File(inputFileName));
+
+        OutputStream out = new FileOutputStream(new File(outputFileName));
+
+        base64Decoder.decodeBuffer(in, out);
+
+        in.close();
+
+        out.close();
+
+    }
+
+    /**
+     * 인코딩된 문자열을 다시 디코딩해서 원본파일을 만들어준다
+     * 
+     * @param encodesString
+     * @param outputFileName 파일이 저장될 경로와 파일명을 지정
+     * @throws IOException
+     */
+    public static void decodeStringtoFile(String encodesString, String outputFileName) throws IOException {
+
+        BASE64Decoder base64Decoder = new BASE64Decoder();
+
+        InputStream inStream = new ByteArrayInputStream(encodesString.toString().getBytes("UTF-8"));
+
+        BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(outputFileName));
+
+        base64Decoder.decodeBuffer(inStream, outStream);
+
+        inStream.close();
+
+        outStream.close();
+
+    }
+
+    /**
+     * 문자열을 base64로 인코딩한다
+     * 
+     * @param s
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static String encode(String s) throws UnsupportedEncodingException {
+
+        byte[] encodeBytes = s.getBytes("UTF-8");
+
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+
+        ByteArrayInputStream bin = new ByteArrayInputStream(encodeBytes);
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+
+        byte[] buf = null;
+
+        try {
+
+            base64Encoder.encodeBuffer(bin, bout);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        buf = bout.toByteArray();
+
+        return new String(buf, "UTF-8").trim();
+
+    }
+
+    /**
+     * 인코딩된 문자열을 base64로 디코딩한다.
+     * 
+     * @param s
+     * @throws Exception
+     */
+    public static String decodeString(String s) throws Exception {
+
+        BASE64Decoder base64Decoder = new BASE64Decoder();
+
+        byte[] a = base64Decoder.decodeBuffer(s);
+
+        return new String(a, "UTF-8");
+
+    }
+    
+    /**   
+     *  Base64Encoding을 수행한다. (Binany to Ascii String)   
+     *   
+     *  @param encodeBytes encoding할 byte array   
+     *  @return encoding 된 String   
+     */   
+    public static String encode(byte[] encodeBytes) throws Exception {    
+            
+        BASE64Encoder base64Encoder = new BASE64Encoder();    
+        ByteArrayInputStream bin = new ByteArrayInputStream(encodeBytes);    
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();    
+        byte[] buf = null;    
+ 
+        base64Encoder.encodeBuffer(bin, bout);    
+
+        buf = bout.toByteArray();    
+        return new String(buf, "UTF-8").trim();    
+    }    
+   
+    /**   
+     *  Base64Decoding 수행한다. (Ascii String to Binany)    
+     *   
+     *  @param strDecode decoding할 String   
+     *  @return decoding 된 byte array   
+     */   
+    public static byte[] decode(String strDecode) throws Exception {   
+            
+        BASE64Decoder base64Decoder = new BASE64Decoder();    
+        ByteArrayInputStream bin = new ByteArrayInputStream(strDecode.getBytes());    
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();    
+        byte[] buf = null;    
+      
+        base64Decoder.decodeBuffer(bin, bout);    
+   
+        buf = bout.toByteArray();    
+   
+        return buf;    
+   
+    }    
+
+}
