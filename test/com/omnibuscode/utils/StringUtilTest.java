@@ -1,3 +1,4 @@
+package com.omnibuscode.utils;
 import com.omnibuscode.utils.StringUtil;
 
 public class StringUtilTest {

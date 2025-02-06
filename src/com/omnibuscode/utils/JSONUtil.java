@@ -291,6 +291,7 @@ public class JSONUtil {
     
     /**
      * JSONObject instance를 JsonNode instance로 변환
+     * 단, json data 의 모든 parameter 의 value 는 object reference 가 아니어야 한다.
      * @param jsonObject
      * @return
      * @throws Exception
