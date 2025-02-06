@@ -271,11 +271,11 @@ public class JSONUtil {
     }
     
     /**
-     * JsonNode 객체를 JSONObject 객체로 변환
+     * JsonNode instance를 JSONObject instance로 변환
      * @param jsonNode
      * @return
      */
-    public static JSONObject convertJsonNodeToJSONObject(JsonNode jsonNode) {
+    public static JSONObject jsonNodeToJSONObject(JsonNode jsonNode) {
         try {
             // ObjectMapper를 사용하여 JsonNode를 String으로 변환
             ObjectMapper mapper = new ObjectMapper();
@@ -287,5 +287,16 @@ public class JSONUtil {
             e.printStackTrace();
             return null; // 예외 발생 시 null 반환
         }
+    }
+    
+    /**
+     * JSONObject instance를 JsonNode instance로 변환
+     * @param jsonObject
+     * @return
+     * @throws Exception
+     */
+    public static JsonNode jsonObjectToJsonNode(JSONObject jsonObject) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readTree(jsonObject.toString());
     }
 }
