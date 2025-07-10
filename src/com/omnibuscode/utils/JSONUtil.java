@@ -31,6 +31,28 @@ public class JSONUtil {
 	private static Logger log = LogManager.getLogger(JSONUtil.class);
 
 	/**
+	 * 입력된 문자열이 유효한 JSON 형태인지 확인합니다.
+	 *
+	 * @param jsonString 확인할 문자열
+	 * @return 유효한 JSON이면 true, 아니면 false
+	 */
+	public static boolean isValidJson(String jsonString) {
+		if (jsonString == null || jsonString.trim().isEmpty()) {
+			return false; // null이거나 비어있는 문자열은 JSON이 아님
+		}
+		try {
+			// readTree() 메서드는 유효한 JSON 문자열이면 JsonNode를 반환하고,
+			// 유효하지 않으면 JsonProcessingException을 던집니다.
+			new ObjectMapper().readTree(jsonString);
+			return true;
+		} catch (JsonProcessingException e) {
+			// JSON 파싱 중 예외가 발생하면 유효한 JSON이 아닙니다.
+			// 필요하다면 e.printStackTrace(); 를 통해 예외 내용을 로깅할 수 있습니다.
+			return false;
+		}
+	}
+	
+	/**
 	 * Object Map을 JSONObject로 변환한다.
 	 * @param map Map<String, Object>.
 	 * @return String.
